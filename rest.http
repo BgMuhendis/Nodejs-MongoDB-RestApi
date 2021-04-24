@@ -1,0 +1,27 @@
+@Base_Url=http://localhost:3000/users
+
+GET {{Base_Url}}
+
+###
+
+POST {{Base_Url}}/register
+Content-Type: application/json
+
+{
+    "name":"Muhadmmet",
+    "email":"muhammedhhadikamat@gmail.com",
+    "password":"15975-+-"
+}
+
+###
+DELETE  {{Base_Url}}
+
+
+###
+PATCH {{Base_Url}}/6083f52fdcaaca4850e2b282
+Content-Type: application/json
+
+{
+    "name":"Muhadmmet Hadi"
+    
+}
