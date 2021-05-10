@@ -45,6 +45,31 @@ UserSchema.methods.toJSON= function(){
         return user;
 }
 
+UserSchema.statics.login= async (email,password) =>{
+
+    const {error,value}= schema.validate({email,password});
+     if (error) {
+         throw createError(400, error);
+     }
+ 
+    const user= await User.findOne({email});
+    if (!user) {
+        throw createError(400, "Girilen email/şifre hatalıdır.");
+    }
+    const passwordControl=await bcrypt.compare(password, user.password);
+    if (!passwordControl) {
+         throw createError(400, "Girilen email/şifre hatalıdır."); 
+    }
+    return user;
+ }
+
+UserSchema.methods.generateToken = async function(){
+    const loginUser= this;
+     const token= await jwt.sign({_id:loginUser._id},"KthG19632eril+-+-",{expiresIn:"1h"});
+     return token;
+
+}
+
 UserSchema.methods.joiValidation= function (userObject){
     schema.required();
     return schema.validate(userObject);

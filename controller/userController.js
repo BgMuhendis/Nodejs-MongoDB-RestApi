@@ -67,10 +67,25 @@ const updateUser = async (req,res,next)=>{
         }
     }
 }
+const userSignIn= async (req,res,next)=> {
+    
+    try {
+     const user= await User.login(req.body.email,req.body.password);
+     const token = await user.generateToken();
+     res.json({
+         user,
+         token
+     });
+    } catch (error) {
+        next(error);
+    }
+
+}
 
 module.exports={
     userRegister,
     listAllUser,
     deleteAllUser,
-    updateUser
+    updateUser,
+    userSignIn
 }
