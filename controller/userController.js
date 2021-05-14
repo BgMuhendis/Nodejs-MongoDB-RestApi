@@ -1,83 +1,47 @@
-const User =require("../model/userModel");
-const createError = require('http-errors');
-const bcrypt=require("bcrypt");
+const userService = require("../service/userService");
 
 const userRegister=async (req,res,next)=>{
     try {
-        const addUser = new User(req.body);
-        const {error,value}=addUser.joiValidation(req.body);
-
-        if (error) {
-            next(createError(400,error));
-        }else{
-            addUser.password=await bcrypt.hash(addUser.password,10);
-            const result = await addUser.save();
-            res.send(result);
-        }
-       
-    } catch (err) {
-        next(err);
+        const addUser = await userService.userRegister(req.body);
+        res.send(addUser);
+    } catch (error) {
+        
     }
 }
 const listAllUser = async (req, res,next) => {
-    const allUser= await User.find({});
-    if (allUser.length>0) {
+    try {
+        const allUser = await userService.listAllUser();
         res.json(allUser);
-    }else{
-        res.send("Db de kullanıcı bulunamadı");
+    } catch (error) {
+        next(createError(400,"Bulunamadı"));
     }
-    
+
     
 }
 
 const deleteAllUser = async (req, res, next) =>{
     try {
-        const deletedUser=await User.deleteMany();
-        if (deletedUser) {
-           return res.send(deletedUser);
-        }else{
-            const hata=new Error("Kullanıcı Bulunamadı");
-            hata.statusCode=404;
-           throw createError(404,"Kullanıcı Bulunamadı");
-        }
+        const deletedUsers = await userService.deleteAllUser();
+        res.send(deletedUsers);
     } catch (error) {
-        next(createError(400, error));
+        
     }
 }
 
 const updateUser = async (req,res,next)=>{
-    delete req.body.createAt;
-    delete req.body.updateAt;
-    if (req.body.hasOwnProperty("password")) {
-        req.body.password= await bcrypt.hash(req.body.password,10);
-    }
-    const {error , value }=User.joiValidationUpdate(req.body);
-    if (error) {
-        next(createError(400,error));
-    }else{
-        try {
-            const result= await User.findByIdAndUpdate({_id:req.params.id},req.body,{new:true , runValidators:true})
-            if (result) {
-                return res.send(result);
-            }else{
-               next(createError(404,"Kayıt Yok"))
-            }
-        } catch (error) {
-            next(error);
-        }
+    try {
+        const updatedUser = await userService.updatedUser(req.body,req.params.id);
+        res.send(updatedUser);
+    } catch (error) {
+        
     }
 }
 const userSignIn= async (req,res,next)=> {
-    
     try {
-     const user= await User.login(req.body.email,req.body.password);
-     const token = await user.generateToken();
-     res.json({
-         user,
-         token
-     });
+        const loginUser = await userService.userSignIn(req.body.email,req.body.password);
+        res.json(loginUser);
     } catch (error) {
-        next(error);
+        
     }
 
 }

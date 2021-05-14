@@ -9,7 +9,7 @@ Content-Type: application/json
 
 {
     "name":"Muhadmmet",
-    "email":"muhammedhhadikamat@gmail.com",
+    "email":"muhammedhhadikamatt@gmail.com",
     "password":"15975-+-"
 }
 
@@ -29,10 +29,10 @@ DELETE  {{Base_Url}}
 
 
 ###
-PATCH {{Base_Url}}/6083f52fdcaaca4850e2b282
+PATCH {{Base_Url}}/609ecaa77bf48e2d78358390
 Content-Type: application/json
 
 {
-    "name":"Muhadmmet Hadi"
+    "name":"Muhadmmet Hadid"
     
 }
