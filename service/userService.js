@@ -67,7 +67,7 @@ const updatedUser = async (user,id)=>{
         }
     }
 }
-const userSignIn= async function(email, password) {
+const userSignIn= async (email, password)=> {
     try {
      const user= await User.login(email,password);
      const token = await user.generateToken();
